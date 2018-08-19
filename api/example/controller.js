@@ -8,6 +8,8 @@ module.exports = {
   functionA (req, res, next) {
     console.log('Route A')
     res.send('route A, call after middleware')
+    // Call next to execute functionC : /master
+    // Call next to execute the after middleware functions : /a
     next()
   },
   functionB (req, res) {

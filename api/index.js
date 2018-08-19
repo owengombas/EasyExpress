@@ -8,7 +8,7 @@ scanDir(__dirname, file => {
   const middlewares = require(`./${file}/middleware`)
   const apiRouter = expressRouter()
 
-  // Load before middleware
+  // Load "before" middlewares
   middlewares.before && middlewares.before.forEach(mw => apiRouter.use(mw))
 
   // Load routes
@@ -21,7 +21,7 @@ scanDir(__dirname, file => {
     apiRouter[method](route, ...functions)
   })
 
-  // Load after middlewares
+  // Load "after" middlewares
   middlewares.after && middlewares.after.forEach(mw => apiRouter.use(mw))
 
   // Import API
