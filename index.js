@@ -1,5 +1,3 @@
-global.__basedir = __dirname
-
 require('dotenv').load()
 const express = require('express')
 const cors = require('cors')
