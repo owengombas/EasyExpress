@@ -1,9 +1,9 @@
 {
-  "name": "aslAPI",
+  "name": "EasyExpress",
   "version": "1.0.0",
-  "description": "ASL API",
+  "description": "An EasyExpress app",
   "main": "index.js",
-  "author": "Owen Gombas <owen.gombas@gmail.com>",
+  "author": "John Doe",
   "license": "MIT",
   "private": true,
   "dependencies": {
@@ -15,7 +15,7 @@
     "mongoose": "^5.2.9"
   },
   "scripts": {
-    "nm": "nodemon index.js",
-    "create": "node ./scripts/createRoute/index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   }
 }
