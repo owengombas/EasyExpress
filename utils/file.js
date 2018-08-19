@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-module.exports = (root, cb) => {
+module.exports.scanDirSync = (root, cb) => {
   const files = fs.readdirSync(root)
   files.forEach(file => {
     const stats = fs.lstatSync(path.join(root, file))
@@ -9,4 +9,8 @@ module.exports = (root, cb) => {
       cb(file)
     }
   })
+}
+
+module.exports.fileExistsSync = (root, file) => {
+  return fs.existsSync(path.join(root, file))
 }

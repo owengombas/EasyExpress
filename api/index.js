@@ -1,32 +1,41 @@
 const expressRouter = require('express').Router
 const router = expressRouter()
-const scanDir = require('../utils/scanDir')
+const { scanDirSync, fileExistsSync } = require('../utils/file')
 
-scanDir(__dirname, file => {
+scanDirSync(__dirname, file => {
   // Run before api import
-  const apiRouterConfig = require(`./${file}/router`)
-  const middlewares = require(`./${file}/middleware`)
-  const apiRouter = expressRouter()
+  const routerFile = `./${file}/router.js`
+  const middlewareFile = `./${file}/middleware.js`
+  if (fileExistsSync(__dirname, routerFile)) {
+    let middlewares = fileExistsSync(__dirname, middlewareFile)
+    const apiRouterConfig = require(routerFile)
+    const apiRouter = expressRouter()
 
-  // Load "before" middlewares
-  middlewares.before && middlewares.before.forEach(mw => apiRouter.use(mw))
+    // Load middlewares if middleware.js file exists
+    middlewares = middlewares && require(`./${file}/middleware`)
 
-  // Load routes
-  apiRouterConfig.forEach(r => {
-    const list = Array.isArray(r)
-    const method = r[list ? 0 : 'method']
-    const route = r[list ? 1 : 'route'] 
-    let functions = r[list ? 2 : 'functions']
-    functions = Array.isArray(functions) ? functions : [functions]
-    apiRouter[method](route, ...functions)
-  })
-
-  // Load "after" middlewares
-  middlewares.after && middlewares.after.forEach(mw => apiRouter.use(mw))
-
-  // Import API
-  router.use(`/${file}`, apiRouter)
-  console.log(`API: ${file} imported`)
+    // Load "after" middlewares
+    middlewares.before && middlewares.before.forEach(mw => apiRouter.use(mw))
+  
+    // Load routes
+    apiRouterConfig.forEach(r => {
+      const list = Array.isArray(r)
+      const method = r[list ? 0 : 'method']
+      const route = r[list ? 1 : 'route'] 
+      let functions = r[list ? 2 : 'functions']
+      functions = Array.isArray(functions) ? functions : [functions]
+      apiRouter[method](route, ...functions)
+    })
+  
+    // Load "after" middlewares
+    middlewares.after && middlewares.after.forEach(mw => apiRouter.use(mw))
+  
+    // Import API
+    router.use(`/${file}`, apiRouter)
+    console.log(`API: ${file} - IMPORTED ✅`)
+  } else {
+    console.log(`API: ${file} - router.js is required ❌`)
+  }
 })
 
 module.exports = router
