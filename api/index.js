@@ -7,12 +7,10 @@ scanDirSync(__dirname, file => {
   const routerFile = `./${file}/router.js`
   const middlewareFile = `./${file}/middleware.js`
   if (fileExistsSync(__dirname, routerFile)) {
-    let middlewares = fileExistsSync(__dirname, middlewareFile)
+    // Load middlewares if middleware.js file exists
+    const middlewares = fileExistsSync(__dirname, middlewareFile) && require(`./${file}/middleware`)
     const apiRouterConfig = require(routerFile)
     const apiRouter = expressRouter()
-
-    // Load middlewares if middleware.js file exists
-    middlewares = middlewares && require(`./${file}/middleware`)
 
     // Load "after" middlewares
     middlewares.before && middlewares.before.forEach(mw => apiRouter.use(mw))
