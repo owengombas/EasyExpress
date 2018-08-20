@@ -12,7 +12,7 @@ scanDirSync(__dirname, file => {
     const apiRouterConfig = require(routerFile)
     const apiRouter = expressRouter()
 
-    // Load "after" middlewares
+    // Load "before" middlewares
     middlewares.before && middlewares.before.forEach(mw => apiRouter.use(mw))
   
     // Load routes
