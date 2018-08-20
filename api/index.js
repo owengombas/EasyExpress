@@ -18,7 +18,7 @@ scanDirSync(__dirname, file => {
     // Load routes
     apiRouterConfig.forEach(r => {
       const list = Array.isArray(r)
-      const method = r[list ? 0 : 'method']
+      const method = r[list ? 0 : 'method'].toLowerCase()
       const route = r[list ? 1 : 'route'] 
       let functions = r[list ? 2 : 'functions']
       functions = Array.isArray(functions) ? functions : [functions]
